@@ -66,7 +66,7 @@ bool mapperInitFDS(uint8_t *fdsFile, bool fdsSideB, uint8_t *prgRAM, uint32_t pr
 	rewind(f);
 	if(fsize != 0x2000)
 	{
-		printf("disksys.rom has a wrong size, is %i bytes, should be 8192 bytes!\n", fsize);
+		printf("disksys.rom has a wrong size, is %i bytes, should be 8192 bytes!\n", (int)fsize);
 		fclose(f);
 		return false;
 	}

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <malloc.h>
+#include <string.h>
 #include <inttypes.h>
 #include <GL/glut.h>
 #include <GL/glext.h>

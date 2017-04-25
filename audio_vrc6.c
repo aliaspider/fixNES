@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <inttypes.h>
 #include <malloc.h>
+#include <string.h>
 #include "audio_vrc6.h"
 #include "audio.h"
 #include "mem.h"
@@ -38,7 +39,7 @@ void vrc6AudioInit()
 	vrc6_p1Duty = 0, vrc6_p2Duty = 0, vrc6_sawAdd = 0;
 	vrc6_speed = 0;
 	vrc6_p1const = false, vrc6_p2const = false;
-	vrc6_p1enable = false, vrc6_p2enable = false, vrc6_sawenable;
+	vrc6_p1enable = false, vrc6_p2enable = false, vrc6_sawenable = false;
 	vrc6_halt = false;
 	//printf("VRC6 Audio Inited!\n");
 }

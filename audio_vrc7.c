@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <inttypes.h>
 #include <malloc.h>
+#include <string.h>
 #include <math.h>
 #include "audio_vrc7.h"
 #include "audio.h"
@@ -85,7 +86,7 @@ enum
 static const uint32_t vrc7MaxAtten = (1<<23);
 static const double attenDb = (1<<23) / 48.0;
 
-inline int32_t vrc7FromDb(double in)
+static inline int32_t vrc7FromDb(double in)
 {
 	return (int32_t)(in * attenDb);
 }
