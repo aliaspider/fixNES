@@ -26,6 +26,8 @@
 #include "audio_vrc7.h"
 #include "libretro.h"
 
+#define AUDIO_DECIMATION_RATE 16
+
 #define DEBUG_HZ 0
 #define DEBUG_MAIN_CALLS 0
 #define DEBUG_KEY 0
@@ -545,7 +547,7 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
    info->geometry.max_width   = VISIBLE_DOTS;
    info->geometry.max_height  = VISIBLE_LINES;
    info->timing.fps           = 60;
-   info->timing.sample_rate   = apuGetFrequency();
+   info->timing.sample_rate   = (float)apuGetFrequency() / (float)AUDIO_DECIMATION_RATE;
 }
 
 void retro_init(void)
@@ -675,21 +677,23 @@ size_t retro_get_memory_size(unsigned id)
 int audioUpdate()
 {
    static int16_t buffer[512 * 2];
-   float* in_ptr = (float*)apuGetBuf();
+   static int pos = 0;
+   float* buffer_in = (float*)apuGetBuf();
    int16_t* out_ptr = buffer;
-   int samples = apuGetBufSize() / 4;
-   while (samples > 0)
+   int samples = apuGetBufSize() / sizeof(float);
+   while (pos < samples)
    {
-      int val = *(in_ptr++) * 0x4000;
+      int val = buffer_in[pos] * 0x4000;
       *(out_ptr++) = val;
       *(out_ptr++) = val;
-      samples--;
+      pos += AUDIO_DECIMATION_RATE;
       if (out_ptr == &buffer[512 * 2])
       {
          audio_batch_cb(buffer, 512);
          out_ptr = buffer;
       }
    }
+   pos -= samples;
 
    if (out_ptr > buffer)
       audio_batch_cb(buffer, (out_ptr - buffer) / 2);
